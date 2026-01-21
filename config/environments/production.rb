@@ -59,6 +59,7 @@ Rails.application.configure do
 
   # Ensure the app knows its own URL for links in emails
   config.action_mailer.default_url_options = { host: ENV["EMAIL_HOST"] }
+  config.action_mailer.delivery_job = nil
 
   # Use SMTP to send emails
   config.action_mailer.delivery_method = :smtp
