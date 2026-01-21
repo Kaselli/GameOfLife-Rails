@@ -6,6 +6,7 @@ export default class extends Controller {
 
   connect() {
     this.running = false
+    console.log("Stimulus connesso alla simulazione!")
   }
 
   toggle() {
@@ -13,6 +14,7 @@ export default class extends Controller {
     this.buttonTarget.innerText = this.running ? "Stop Simulazione" : "Start Simulazione"
     
     if (this.running) {
+      console.log("Simulazione partita...");
       this.runLoop()
     }
   }
@@ -20,7 +22,6 @@ export default class extends Controller {
   runLoop() {
     if (!this.running) return
 
-    // Chiama l'azione server 'advance'
     fetch(this.urlValue, {
       method: "POST",
       headers: {
@@ -28,15 +29,22 @@ export default class extends Controller {
         "Accept": "text/vnd.turbo-stream.html"
       }
     })
-    .then(response => response.text())
+    .then(response => {
+      if (response.ok) return response.text()
+      throw new Error("Errore nella chiamata al server")
+    })
     .then(html => {
-      // Turbo gestisce l'aggiornamento del DOM tramite lo stream
-      document.body.insertAdjacentHTML("beforeend", html) // Turbo stream injection
+      // Questo applica l'aggiornamento Turbo Stream manualmente
+      Turbo.renderStreamMessage(html)
       
-      // Ritardo per l'animazione (es. 500ms) e ripetizione
       if (this.running) {
         setTimeout(() => this.runLoop(), 500) 
       }
+    })
+    .catch(error => {
+      console.error(error)
+      this.running = false
+      this.buttonTarget.innerText = "Errore - Start"
     })
   }
 }

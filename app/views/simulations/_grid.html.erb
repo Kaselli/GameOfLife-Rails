@@ -1,4 +1,4 @@
-<div id="game_board_container" style="text-align: center; margin-top: 20px; font-family: sans-serif;">
+<div id="game_board" style="text-align: center; margin-top: 20px; font-family: sans-serif;">
   <div style="margin-bottom: 20px; padding: 15px; background: #f4f4f4; border-radius: 8px; display: inline-block; border: 1px solid #ddd;">
     <h2 style="margin: 0; color: #333;">Generazione <%= simulation.generation_number %></h2>
     <small style="color: #666;"><%= simulation.rows %> righe x <%= simulation.cols %> colonne</small>
@@ -24,8 +24,8 @@
             justify-content: center;
             font-size: 10px;
           ">
-            <%# Opzionale: decommenta la riga sotto se vuoi vedere i caratteri per debug %>
-            <%#= cell %>
+            
+            <%= cell %>
           </div>
         <% end %>
       <% end %>

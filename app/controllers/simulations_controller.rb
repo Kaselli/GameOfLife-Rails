@@ -49,17 +49,15 @@ class SimulationsController < ApplicationController
   def advance
     engine = GameOfLifeEngine.new(@simulation.grid_data, @simulation.rows, @simulation.cols)
     new_grid = engine.next_generation
-    
+
     @simulation.update!(
       grid_data: new_grid, 
       generation_number: @simulation.generation_number + 1
     )
 
-    # Risposta Turbo Stream per aggiornare solo la griglia
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to @simulation }
-    end
+    render turbo_stream: turbo_stream.replace("game_board", 
+          partial: "simulations/grid", 
+          locals: { simulation: @simulation })
   end
 
   private

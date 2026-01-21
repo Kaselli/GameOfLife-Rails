@@ -33,15 +33,16 @@ class GameOfLifeEngine
 
   def count_alive_neighbors(row, col)
     count = 0
+    # Controlla le 8 celle circostanti
     (-1..1).each do |i|
       (-1..1).each do |j|
         next if i == 0 && j == 0 # Salta la cella stessa
         
         r, c = row + i, col + j
         
-        # Controlla i bordi (No life off the edges)
         if r >= 0 && r < @rows && c >= 0 && c < @cols
-          count += 1 if @grid[r][c] == '*'
+          # Usiamo .to_s per sicurezza nel caso il JSON venga letto con tipi strani
+          count += 1 if @grid[r][c].to_s == '*'
         end
       end
     end
