@@ -62,18 +62,18 @@ Rails.application.configure do
   config.action_mailer.delivery_job = nil
 
   # Use SMTP to send emails
-  config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-  address:              'smtp.gmail.com',
-  port:                 587,
-  domain:               'gmail.com',
-  user_name:            ENV["SMTP_USERNAME"],
-  password:             ENV["SMTP_PASSWORD"],
-  authentication:       'plain',
-  enable_starttls_auto: true,
-  open_timeout:         5,
-  read_timeout:         5
-}
+    address:              'smtp.gmail.com',
+    port:                 465, # Changed from 587
+    domain:               'gmail.com',
+    user_name:            ENV["SMTP_USERNAME"],
+    password:             ENV["SMTP_PASSWORD"],
+    authentication:       'plain',
+    tls:                  true,  # Added this
+    enable_starttls_auto: false, # Changed to false because we are using direct TLS
+    open_timeout:         10,
+    read_timeout:         10
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
