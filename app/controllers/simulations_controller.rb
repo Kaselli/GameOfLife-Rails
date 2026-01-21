@@ -11,19 +11,33 @@ class SimulationsController < ApplicationController
     
     begin
       content = uploaded_file.read
+      # Debug: stampa il contenuto per vedere se viene letto bene
+      puts "DEBUG: Contenuto file:\n#{content}" 
+      
       data = InputParser.parse(content)
       
-      @simulation = current_user.simulations.create!(
+      @simulation = current_user.simulations.new( # Cambiato da create! a new per debug
         generation_number: data[:generation],
         rows: data[:rows],
         cols: data[:cols],
         grid_data: data[:grid]
       )
-      redirect_to @simulation
+
+      if @simulation.save
+        redirect_to @simulation
+      else
+        # Se il problema è la validazione del modello Simulation
+        flash.now[:alert] = "Errore salvataggio: #{@simulation.errors.full_messages.join(", ")}"
+        render :new, status: :unprocessable_entity
+      end
+
     rescue InputParser::InvalidFormatError => e
-      flash.now[:alert] = "Errore nel file: #{e.message}"
+      flash.now[:alert] = "Errore formato: #{e.message}"
       render :new, status: :unprocessable_entity
     rescue => e
+      # Questo stamperà l'errore esatto nella tua console di GitHub Codespaces
+      puts "ERRORE CRITICO: #{e.message}"
+      puts e.backtrace.first(5)
       flash.now[:alert] = "Errore generico: #{e.message}"
       render :new, status: :unprocessable_entity
     end
