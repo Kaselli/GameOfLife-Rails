@@ -1,0 +1,14 @@
+<div class="inline-block border border-gray-400 bg-gray-100 p-4 rounded shadow">
+  <h2 class="text-xl font-bold mb-2">Generazione <%= simulation.generation_number %></h2>
+  <p class="text-sm text-gray-600 mb-4"><%= simulation.rows %> x <%= simulation.cols %></p>
+
+  <div style="display: grid; grid-template-columns: repeat(<%= simulation.cols %>, 20px); gap: 1px;">
+    <% simulation.grid_data.each do |row| %>
+      <% row.each do |cell| %>
+        <div style="width: 20px; height: 20px;" 
+             class="<%= cell == '*' ? 'bg-black' : 'bg-white' %> border border-gray-200">
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
