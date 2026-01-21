@@ -1,14 +1,34 @@
-<div class="inline-block border border-gray-400 bg-gray-100 p-4 rounded shadow">
-  <h2 class="text-xl font-bold mb-2">Generazione <%= simulation.generation_number %></h2>
-  <p class="text-sm text-gray-600 mb-4"><%= simulation.rows %> x <%= simulation.cols %></p>
+<div id="game_board_container" style="text-align: center; margin-top: 20px; font-family: sans-serif;">
+  <div style="margin-bottom: 20px; padding: 15px; background: #f4f4f4; border-radius: 8px; display: inline-block; border: 1px solid #ddd;">
+    <h2 style="margin: 0; color: #333;">Generazione <%= simulation.generation_number %></h2>
+    <small style="color: #666;"><%= simulation.rows %> righe x <%= simulation.cols %> colonne</small>
+  </div>
 
-  <div style="display: grid; grid-template-columns: repeat(<%= simulation.cols %>, 20px); gap: 1px;">
-    <% simulation.grid_data.each do |row| %>
-      <% row.each do |cell| %>
-        <div style="width: 20px; height: 20px;" 
-             class="<%= cell == '*' ? 'bg-black' : 'bg-white' %> border border-gray-200">
-        </div>
+  <div style="display: flex; justify-content: center;">
+    <div style="
+      display: grid; 
+      grid-template-columns: repeat(<%= simulation.cols %>, 25px); 
+      gap: 2px; 
+      background-color: #ccc; 
+      padding: 2px; 
+      border: 2px solid #333;
+    ">
+      <% simulation.grid_data.each do |row| %>
+        <% row.each do |cell| %>
+          <div style="
+            width: 25px; 
+            height: 25px; 
+            background-color: <%= cell == '*' ? '#333' : '#fff' %>;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+          ">
+            <%# Opzionale: decommenta la riga sotto se vuoi vedere i caratteri per debug %>
+            <%#= cell %>
+          </div>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 </div>
