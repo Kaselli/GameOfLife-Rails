@@ -4,7 +4,7 @@ class InputParser
   def self.parse(file_content)
     # Puliamo il contenuto da spazi bianchi extra a inizio/fine e gestiamo i ritorni a capo
     lines = file_content.strip.split(/\r?\n/).map(&:strip).reject(&:empty?)
-    
+
     raise InvalidFormatError, "File troppo corto o vuoto" if lines.length < 3
 
     # 1. Parsing Generazione

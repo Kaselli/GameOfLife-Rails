@@ -14,14 +14,14 @@ class GameOfLifeEngine
     @rows.times do |r|
       @cols.times do |c|
         alive_neighbors = count_alive_neighbors(r, c)
-        is_alive = @grid[r][c] == '*'
+        is_alive = @grid[r][c] == "*"
 
         if is_alive
           # Regole per cellule vive
-          new_grid[r][c] = (alive_neighbors == 2 || alive_neighbors == 3) ? '*' : '.'
+          new_grid[r][c] = (alive_neighbors == 2 || alive_neighbors == 3) ? "*" : "."
         else
           # Regola per cellule morte
-          new_grid[r][c] = (alive_neighbors == 3) ? '*' : '.'
+          new_grid[r][c] = (alive_neighbors == 3) ? "*" : "."
         end
       end
     end
@@ -37,12 +37,12 @@ class GameOfLifeEngine
     (-1..1).each do |i|
       (-1..1).each do |j|
         next if i == 0 && j == 0 # Salta la cella stessa
-        
+
         r, c = row + i, col + j
-        
+
         if r >= 0 && r < @rows && c >= 0 && c < @cols
           # Usiamo .to_s per sicurezza nel caso il JSON venga letto con tipi strani
-          count += 1 if @grid[r][c].to_s == '*'
+          count += 1 if @grid[r][c].to_s == "*"
         end
       end
     end

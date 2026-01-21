@@ -1,6 +1,6 @@
 class SimulationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_simulation, only: [:show, :advance]
+  before_action :set_simulation, only: [ :show, :advance ]
 
   def new
     @simulation = Simulation.new
@@ -8,14 +8,14 @@ class SimulationsController < ApplicationController
 
   def create
     uploaded_file = params[:simulation][:file]
-    
+
     begin
       content = uploaded_file.read
       # Debug: stampa il contenuto per vedere se viene letto bene
-      puts "DEBUG: Contenuto file:\n#{content}" 
-      
+      puts "DEBUG: Contenuto file:\n#{content}"
+
       data = InputParser.parse(content)
-      
+
       @simulation = current_user.simulations.new( # Cambiato da create! a new per debug
         generation_number: data[:generation],
         rows: data[:rows],
@@ -51,12 +51,12 @@ class SimulationsController < ApplicationController
     new_grid = engine.next_generation
 
     @simulation.update!(
-      grid_data: new_grid, 
+      grid_data: new_grid,
       generation_number: @simulation.generation_number + 1
     )
 
-    render turbo_stream: turbo_stream.replace("game_board", 
-          partial: "simulations/grid", 
+    render turbo_stream: turbo_stream.replace("game_board",
+          partial: "simulations/grid",
           locals: { simulation: @simulation })
   end
 
