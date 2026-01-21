@@ -2,23 +2,32 @@ class InputParser
   class InvalidFormatError < StandardError; end
 
   def self.parse(file_content)
-    lines = file_content.strip.split("\n")
+    # Puliamo il contenuto da spazi bianchi extra a inizio/fine e gestiamo i ritorni a capo
+    lines = file_content.strip.split(/\r?\n/).map(&:strip).reject(&:empty?)
     
-    # Validazione base e parsing
-    gen_match = lines[0].match(/Generation (\d+):/)
-    raise InvalidFormatError, "Formato Generazione non valido" unless gen_match
+    raise InvalidFormatError, "File troppo corto o vuoto" if lines.length < 3
+
+    # 1. Parsing Generazione
+    gen_match = lines[0].match(/Generation\s+(\d+):/i)
+    raise InvalidFormatError, "Prima riga deve essere 'Generation X:'" unless gen_match
     generation = gen_match[1].to_i
 
-    dims = lines[1].split.map(&:to_i)
-    raise InvalidFormatError, "Dimensioni non valide" unless dims.length == 2
+    # 2. Parsing Dimensioni (es: 4 8)
+    dims = lines[1].split(/\s+/).map(&:to_i)
+    raise InvalidFormatError, "Seconda riga deve contenere Altezza e Largh (es: 4 8)" unless dims.length == 2
     rows, cols = dims
 
+    # 3. Parsing Griglia
     grid_lines = lines[2..]
-    raise InvalidFormatError, "Altezza griglia non corrispondente" unless grid_lines.length == rows
+    if grid_lines.length != rows
+      raise InvalidFormatError, "Il numero di righe nella griglia (#{grid_lines.length}) non corrisponde a quanto dichiarato (#{rows})"
+    end
 
-    grid = grid_lines.map do |line|
-      chars = line.strip.chars
-      raise InvalidFormatError, "Larghezza griglia non corrispondente" if chars.length != cols
+    grid = grid_lines.map.with_index do |line, index|
+      chars = line.chars
+      if chars.length != cols
+        raise InvalidFormatError, "La riga #{index + 1} della griglia ha #{chars.length} colonne invece di #{cols}"
+      end
       chars
     end
 
