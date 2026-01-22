@@ -63,12 +63,12 @@ Rails.application.configure do
 
   # Use SMTP to send emails
   config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com',
+    address:              "smtp.gmail.com",
     port:                 465, # Changed from 587
-    domain:               'gmail.com',
+    domain:               "gmail.com",
     user_name:            ENV["SMTP_USERNAME"],
     password:             ENV["SMTP_PASSWORD"],
-    authentication:       'plain',
+    authentication:       "plain",
     tls:                  true,  # Added this
     enable_starttls_auto: false, # Changed to false because we are using direct TLS
     open_timeout:         10,
